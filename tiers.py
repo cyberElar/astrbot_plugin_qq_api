@@ -22,7 +22,7 @@ NapCat 的接口不是同一种东西。`get_group_list` 只是读一下，`bot_
 
 ## 给复用方
 
-    from data.plugins.qq_api.tiers import tier_of, SAFE
+    from data.plugins.astrbot_plugin_qq_api.tiers import tier_of, SAFE
 
     if tier_of(action) == SAFE:      # 或者 `action in SAFE`，等价
         ...                          # 可以放心交给 LLM

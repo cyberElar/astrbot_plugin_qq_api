@@ -1,4 +1,4 @@
-"""用假 event 跑 qq_api —— 不起 AstrBot，不连 QQ，也不发消息。
+"""用假 event 跑 astrbot_plugin_qq_api —— 不起 AstrBot，不连 QQ，也不发消息。
 
 ## 怎么跑
 
@@ -6,14 +6,14 @@
 
 **目录必须摆成包的样子**，因为 main.py 里用的是相对导入（`from . import onebot`）：
 
-    /tmp/qq_api_check/
-      qq_api/            ← 包名，和插件名一致
+    /tmp/astrbot_plugin_qq_api_check/
+      astrbot_plugin_qq_api/            ← 包名，和插件名一致
         main.py
         onebot.py
         tiers.py
         test_offline.py
 
-这不是测试的特殊要求 —— AstrBot 自己就是这么加载的：它以 `data.plugins.qq_api.main`
+这不是测试的特殊要求 —— AstrBot 自己就是这么加载的：它以 `data.plugins.astrbot_plugin_qq_api.main`
 导入（`star_manager.py` 里的 `__import__(path, fromlist=[module_str])`），插件目录在
 它眼里本来就是个包。按文件路径直接 load 反而会失败。
 
@@ -36,7 +36,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from aiocqhttp.exceptions import ActionFailed  # noqa: E402
 from astrbot.api.message_components import Image, Reply  # noqa: E402
 
-from qq_api import main, onebot, tiers  # noqa: E402
+from astrbot_plugin_qq_api import main, onebot, tiers  # noqa: E402
 
 FAILED: list[str] = []
 

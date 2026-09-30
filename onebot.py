@@ -3,7 +3,7 @@
 `main.py` 里剩下的都是"聊天界面"（命令、参数、帮助），只有这里是稳定接口。
 你的插件想调 NapCat 的接口，import 这个模块就够了：
 
-    from data.plugins.qq_api.onebot import NotAiocqhttp, CallFailed, call
+    from data.plugins.astrbot_plugin_qq_api.onebot import NotAiocqhttp, CallFailed, call
 
     try:
         groups = await call(event, "get_group_list")
@@ -129,5 +129,5 @@ async def call(
         raise CallFailed(action, f"超时（{timeout}s 没返回）", None, e) from e
     except Exception as e:
         # 连接断了、序列化失败之类 —— 这种是"不该发生"的，留完整栈
-        logger.exception(f"[qq_api.onebot] {action} 调用异常")
+        logger.exception(f"[astrbot_plugin_qq_api.onebot] {action} 调用异常")
         raise CallFailed(action, f"{type(e).__name__}: {e}", None, e) from e

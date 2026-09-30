@@ -1,8 +1,8 @@
-name: qq_api
+name: astrbot_plugin_qq_api
 desc: 在聊天里调 NapCat 的 OneBot API（仅管理员），如改群名片、换头像。
 author: Elarian
 version: 1.1.0
-repo: https://github.com/cyberElar/qq_api
+repo: https://github.com/cyberElar/astrbot_plugin_qq_api
 display_name: QQ API 调用
 short_desc: 在聊天里直接调 NapCat 的 OneBot API —— 改群名片、换头像、拉群列表（仅管理员）
 tags: [管理, 工具, NapCat, OneBot]

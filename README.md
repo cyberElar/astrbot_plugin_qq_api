@@ -1,4 +1,4 @@
-# qq_api
+# astrbot_plugin_qq_api
 
 在聊天里调 NapCat 的 OneBot API —— 改群名片、换头像、拉群列表、发消息。走反向 WebSocket，不碰那个 HTTP 服务端。
 
@@ -58,27 +58,29 @@ await event.bot.call_action("set_group_card", group_id=..., user_id=..., card=..
 
 ## 装法
 
-插件源码在**本仓库**，不在 QQBot 仓库里 —— 所以 compose 里挂的是 `../qq_api`（相对 compose 文件所在目录）：
+插件源码在**本仓库**，不在 QQBot 仓库里 —— 所以 compose 里挂的是 `../astrbot_plugin_qq_api`（相对 compose 文件所在目录）：
 
 ```yaml
-      - ../qq_api:/AstrBot/data/plugins/qq_api
+      - ../astrbot_plugin_qq_api:/AstrBot/data/plugins/astrbot_plugin_qq_api
 ```
 
 插件要**逐个挂**，不能整个目录挂 —— 那会盖掉 WebUI 装进 `runtime/data/plugins/` 的那些（`token_controller`、`debounce`）。挂载也不能加 `:ro`，Python import 时要往插件目录写 `__pycache__`。
 
 ## 自测
 
-`test_offline.py` 用假 event 跑一遍 handler —— 不起 AstrBot、不连 QQ、不发消息。
+`test_offline.py` 用假 event 跑一遍 handler —— 不起 AstrBot、不连 QQ、不联网、不发消息（图片夹具是它自己造的）。
 
-> 下面的命令在 **QQBot 仓库根目录**执行：`scripts/dock.sh` 在那儿，而插件源码在本仓库，所以路径写成 `../qq_api/`。
+> 下面的命令在 **QQBot 仓库根目录**执行：`scripts/dock.sh` 在那儿，而插件源码在本仓库，所以路径写成 `../astrbot_plugin_qq_api/`。
+
+**目录必须摆成包的样子**（所以四个文件要一起拷，而且要放进同名子目录）。这不是测试的特殊要求 —— `main.py` 用的是相对导入（`from . import onebot`），而 AstrBot 本来就把插件目录当包加载（`star_manager.py` 的 `__import__(path, fromlist=[module_str])`）。按文件路径直接 load 反而测不到真实路径。
 
 ```bash
-./scripts/dock.sh "docker exec astrbot mkdir -p /tmp/fakeroot /tmp/qq_api_check"
-./scripts/dock.sh "docker cp ../qq_api/main.py astrbot:/tmp/qq_api_check/main.py"
-./scripts/dock.sh "docker cp ../qq_api/test_offline.py astrbot:/tmp/test_qq_api.py"
-printf 'hello\n' > /tmp/logo.bin
-./scripts/dock.sh "docker cp /tmp/logo.bin astrbot:/tmp/qq_api_check/logo.bin"
-./scripts/dock.sh "docker exec -e ASTRBOT_ROOT=/tmp/fakeroot -e ASTRBOT_CONFIG_PATH=/tmp/fakeroot/cmd_config.json astrbot python3 /tmp/test_qq_api.py"
+PKG=astrbot_plugin_qq_api
+./scripts/dock.sh "docker exec astrbot mkdir -p /tmp/fakeroot /tmp/pkg_check/$PKG"
+for f in main.py onebot.py tiers.py test_offline.py; do
+  ./scripts/dock.sh "docker cp ../$PKG/$f astrbot:/tmp/pkg_check/$PKG/$f"
+done
+./scripts/dock.sh "docker exec -e ASTRBOT_ROOT=/tmp/fakeroot -e ASTRBOT_CONFIG_PATH=/tmp/fakeroot/cmd_config.json astrbot python3 /tmp/pkg_check/$PKG/test_offline.py"
 ```
 
 > ⚠️ **那两个 `-e` 不能省，而且别在插件目录里跑它。**

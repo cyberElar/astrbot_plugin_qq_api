@@ -15,8 +15,8 @@
 想在自己插件里调 OneBot 的话，**不要**从这里 import —— 这个文件是界面层，随时会
 因为改文案、改命令而变。稳定接口只有：
 
-    from data.plugins.qq_api.onebot import call
-    from data.plugins.qq_api.tiers import tier_of, SAFE
+    from data.plugins.astrbot_plugin_qq_api.onebot import call
+    from data.plugins.astrbot_plugin_qq_api.tiers import tier_of, SAFE
 
 ## 用法
 
@@ -55,7 +55,7 @@ from astrbot.core.star.filter.permission import PermissionType
 
 from . import onebot, tiers
 
-# 指令名。插件在 AstrBot 里的 id 是 `qq_api`，但指令用 `qqapi` —— 打字少一次下划线。
+# 指令名。插件在 AstrBot 里的 id 是 `astrbot_plugin_qq_api`，但指令用 `qqapi` —— 打字少一次下划线。
 COMMAND = "qqapi"
 
 # 回复里 JSON 的截断长度。聊天窗口放不下更长的，而且真要看全的应该去翻日志。
@@ -161,7 +161,7 @@ def _split_command(event: AstrMessageEvent) -> tuple[str, list[str], bool]:
 
 
 @register(
-    "qq_api",
+    "astrbot_plugin_qq_api",
     "Elarian",
     "在聊天里调 NapCat 的 OneBot API（仅管理员），如改群名片、换头像。",
     "1.1.0",
