@@ -58,22 +58,24 @@ await event.bot.call_action("set_group_card", group_id=..., user_id=..., card=..
 
 ## 装法
 
-靠 compose 里这一行挂进容器：
+插件源码在**本仓库**，不在 QQBot 仓库里 —— 所以 compose 里挂的是 `../qq_api`（相对 compose 文件所在目录）：
 
 ```yaml
-      - ./plugins/qq_api:/AstrBot/data/plugins/qq_api
+      - ../qq_api:/AstrBot/data/plugins/qq_api
 ```
 
-`plugins/` 下的插件要**逐个挂**，不能整个目录挂 —— 那会盖掉 WebUI 装进 `runtime/data/plugins/` 的那些（`token_controller`、`debounce`）。挂载也不能加 `:ro`，Python import 时要往插件目录写 `__pycache__`。
+插件要**逐个挂**，不能整个目录挂 —— 那会盖掉 WebUI 装进 `runtime/data/plugins/` 的那些（`token_controller`、`debounce`）。挂载也不能加 `:ro`，Python import 时要往插件目录写 `__pycache__`。
 
 ## 自测
 
-`test_offline.py` 用假 event 跑一遍 handler —— 不起 AstrBot、不连 QQ、不发消息：
+`test_offline.py` 用假 event 跑一遍 handler —— 不起 AstrBot、不连 QQ、不发消息。
+
+> 下面的命令在 **QQBot 仓库根目录**执行：`scripts/dock.sh` 在那儿，而插件源码在本仓库，所以路径写成 `../qq_api/`。
 
 ```bash
 ./scripts/dock.sh "docker exec astrbot mkdir -p /tmp/fakeroot /tmp/qq_api_check"
-./scripts/dock.sh "docker cp plugins/qq_api/main.py astrbot:/tmp/qq_api_check/main.py"
-./scripts/dock.sh "docker cp plugins/qq_api/test_offline.py astrbot:/tmp/test_qq_api.py"
+./scripts/dock.sh "docker cp ../qq_api/main.py astrbot:/tmp/qq_api_check/main.py"
+./scripts/dock.sh "docker cp ../qq_api/test_offline.py astrbot:/tmp/test_qq_api.py"
 printf 'hello\n' > /tmp/logo.bin
 ./scripts/dock.sh "docker cp /tmp/logo.bin astrbot:/tmp/qq_api_check/logo.bin"
 ./scripts/dock.sh "docker exec -e ASTRBOT_ROOT=/tmp/fakeroot -e ASTRBOT_CONFIG_PATH=/tmp/fakeroot/cmd_config.json astrbot python3 /tmp/test_qq_api.py"
