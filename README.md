@@ -83,4 +83,8 @@ printf 'hello\n' > /tmp/logo.bin
 >
 > `import astrbot` 会走到 `AstrBotConfig.__init__`，**它一初始化就往 `data/cmd_config.json` 写盘**（补默认键、修键序）。不重定向 `ASTRBOT_ROOT`，光是「导入一下看看」就会改到正在跑的配置。
 >
-> 反过来，如果 cwd 恰好是插件目录（它 bind-mount 到宿主的 `plugins/qq_api/`），那次写盘会**落到宿主源码里**，生成一个 `plugins/qq_api/data/cmd_config.json` —— 里面有 `dashboard.password` 的哈希。这个文件不该进版本库。
+> 反过来，如果 cwd 恰好是插件目录（它 bind-mount 到宿主的插件源码目录），那次写盘会**落到宿主源码里**，生成一个 `data/cmd_config.json` —— 里面有 `dashboard.password` 的哈希。这个文件不该进版本库，跑测试前先确认 cwd 不是插件目录。
+
+## 许可证
+
+AGPL-3.0，全文见 [LICENSE](LICENSE)。
