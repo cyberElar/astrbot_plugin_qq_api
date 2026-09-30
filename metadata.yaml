@@ -2,4 +2,4 @@ name: qq_api
 desc: 在聊天里调 NapCat 的 OneBot API（仅管理员），如改群名片、换头像。
 author: Elarian
 version: 1.0.0
-repo: https://github.com/Elarian/QQBot
+repo: https://github.com/cyberElar/qq_api
